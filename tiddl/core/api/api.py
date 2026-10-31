@@ -173,6 +173,23 @@ class TidalAPI:
             expire_after=EXPIRE_IMMEDIATELY,
         )
 
+    def get_favorite_tracks(
+        self, limit: int = Limits.PLAYLIST_ITEMS_MAX, offset: int = 0
+    ):
+        """Get favorite tracks ordered by the date they were added, newest first."""
+        return self.client.fetch(
+            AlbumItems,
+            f"users/{self.user_id}/favorites/tracks",
+            {
+                "countryCode": self.country_code,
+                "limit": min(limit, Limits.PLAYLIST_ITEMS_MAX),
+                "offset": offset,
+                "order": "DATE",
+                "orderDirection": "DESC",
+            },
+            expire_after=EXPIRE_IMMEDIATELY,
+        )
+
     def get_playlist(self, playlist_uuid: str):
         return self.client.fetch(
             Playlist,
